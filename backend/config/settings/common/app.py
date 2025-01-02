@@ -1,4 +1,2 @@
-# Hide other Users in /users/users list endpoint
-HIDE_USERS = True
 
-x = 4
+EARTH_RADIUS = 6371.0
