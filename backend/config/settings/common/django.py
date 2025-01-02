@@ -32,7 +32,6 @@ THIRD_PARTY_APPS = [
 
 PROJECT_APPS = [
     'common',
-    'users',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -125,9 +124,6 @@ MEDIA_ROOT = str(ROOT_DIR.path('../media/'))
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-# User Settings
-AUTH_USER_MODEL = "users.User"
 
 # needed to differentiate between disabled account and invalid credentials during login
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
