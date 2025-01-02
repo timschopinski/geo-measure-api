@@ -1,0 +1,121 @@
+[tool.flake8]
+ignore = [
+    # Do not call getattr(x, 'attr'), instead use normal property access: x.attr
+    "B009",
+    # Do not call setattr(x, 'attr', val), instead use normal property access: x.attr = val
+    "B010",
+    # assertRaises(Exception) and pytest.raises(Exception) should be considered evil
+    "B017",
+    # Abstract base class has methods, but none of them are abstract.
+    "B024",
+    # Indentation is not a multiple of four (comment)
+    "E114",
+    # Unexpected indentation (comment)
+    "E116",
+    # Whitespace before ‘,’, ‘;’, or ‘:’
+    "E203",
+    # Missing whitespace around operator
+    "E225",
+    # Missing whitespace around arithmetic operator
+    "E226",
+    # Missing whitespace around bitwise or shift operator
+    "E227",
+    # At least two spaces before inline comment
+    "E261",
+    # Block comment should start with ‘# ‘
+    "E265",
+    # Line too long (82 > 79 characters)
+    "E501",
+    # Missing explicit return at the end of function able to return non-None value.
+    "R503",
+    # Unnecessary variable assignment before return statement.
+    "R504",
+    # Unnecessary else after return statement.
+    "R505",
+    # Unnecessary else after raise statement.
+    "R506",
+    # Use a single if-statement instead of nested if-statements
+    "SIM102",
+    # Use any(...)
+    "SIM110",
+    # Combine conditions via a logical or to prevent duplicating code
+    "SIM114",
+    # Split string directly if only constants are used
+    "SIM905",
+    # Use dict.get(key)
+    "SIM908",
+    # Line break before binary operator
+    "W503",
+    # Line break after binary operator
+    "W504"
+]
+exclude = [
+    ".git",
+    "backend/*/migrations/*",
+    "__pypackages__",
+    ".ipython/*",
+    "frontend/*",
+    "static/*",
+    "media/*",
+    "venv/*",
+]
+per-file-ignores = [
+    "config/settings/*:F401,F403,F405",
+    "backend/config/settings/*:F401,F403,F405",
+]
+banned-modules = '''
+    pytz = Use django.utils.timezone
+    typing.Optional = Use | None
+    typing.List = Use list
+    typing.Dict = Use dict
+    typing.Set = Use set
+    typing.Tuple = Use tuple
+    typing.Union = Use |
+'''
+extend-immutable-calls = ["Depends"]
+max-complexity = 15
+ban-relative-imports = true
+
+[tool.black]
+line_length = 120
+target_version = ["py310"]
+skip_string_normalization = true
+force-exclude = '''
+/(
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+src_paths = ["backend", "avbox", "imagebox"]
+skip_glob = ["*/migrations/*.py", "backend/config/settings/common/__init__.py", "*/venvs/*"]
+
+[tool.autoflake]
+check = false
+quiet = true
+in-place = false
+recursive = true
+exclude = "*/migrations/*.py, backend/config/*"
+expand-star-imports = true
+remove-all-unused-imports = true
+ignore-init-module-imports = true
+remove-duplicate-keys = true
+remove-unused-variables = true
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "*/tests/*",
+    "*/node_modules/*",
+    "*/manage.py",
+    "*/config/asgi.py",
+    "backend/config/urls.py",
+    "backend/config/wsgi.py",
+]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+skip_covered = true

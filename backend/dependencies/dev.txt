@@ -1,0 +1,7 @@
+-r requirements.txt
+-r linters.txt
+
+Faker==19.12.1
+factory-boy==3.3.0
+freezegun==0.3.4
+coverage==7.5.3

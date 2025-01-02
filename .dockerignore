@@ -1,0 +1,15 @@
+media/
+backend/.ipython
+.git/
+.vscode/
+.idea/
+frontend/node_modules
+**/venv/
+**/env/
+**/htmlcov/
+**/__pycache__
+**/__pypackages__
+**/*.pyc
+**/*.pyo
+**/swagger_schema_*
+**/.eslintcache

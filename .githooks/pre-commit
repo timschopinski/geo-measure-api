@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# master branch protection
+branch="$(git rev-parse --abbrev-ref HEAD)"
+python_executable="python3.10"
+
+if [ "$branch" = "master" ]; then
+  echo "You can't commit directly to master branch."
+  exit 1
+fi
+
+# autoflake
+echo "Checking unused imports and variables with autoflake..."
+CHECK="$python_executable -m autoflake --in-place"
+python_files_to_check=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(py)$' | tr '\n' ' ')
+as_array=($python_files_to_check)
+files_count=${#as_array[@]}
+
+status=0
+for file in $python_files_to_check; do
+  committed_content=$(cat "$file")
+
+  $CHECK "$file" || status=1
+
+  if [ "$(cat "$file")" != "$committed_content" ]; then
+    echo "Autoflake removed unused imports in $file. Staging the file."
+    git add "$file"
+  fi
+done
+
+if [ "$status" != 0 ]; then
+  exit $status
+fi
+
+# black
+echo "Checking code with black..."
+CHECK="$python_executable -m black --config=./pyproject.toml"
+python_files_to_check=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(py)$' | tr '\n' ' ')
+as_array=($python_files_to_check)
+files_count=${#as_array[@]}
+
+status=0
+for file in $python_files_to_check; do
+  committed_content=$(cat "$file")
+
+  $CHECK "$file" || status=1
+
+  if [ "$(cat "$file")" != "$committed_content" ]; then
+    echo "Black formated code in $file. Staging the file."
+    git add "$file"
+  fi
+done
+
+if [ "$status" != 0 ]; then
+  exit $status
+fi
+
+
+# flake8
+echo "Checking code with flake8..."
+CHECK="$python_executable -m flake8"
+python_files_to_check=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(py)$' | tr '\n' ' ')
+as_array=($python_files_to_check)
+files_count=${#as_array[@]}
+
+status=0
+for file in $python_files_to_check; do
+  $CHECK "$file" || status=1
+done
+
+if [ "$status" != 0 ]; then
+  exit $status
+fi
+
+
+
+# isort
+echo "Checking imports with isort..."
+CHECK="$python_executable -m isort --settings-file=./pyproject.toml"
+python_files_to_check=$(git diff --cached --name-only --diff-filter=d | grep -E '\.(py)$' | tr '\n' ' ')
+as_array=($python_files_to_check)
+files_count=${#as_array[@]}
+
+status=0
+for file in $python_files_to_check; do
+  committed_content=$(cat "$file")
+
+  $CHECK "$file" || status=1
+
+  if [ "$(cat "$file")" != "$committed_content" ]; then
+    echo "isort sorted imports in $file. Staging the file."
+    git add "$file"
+  fi
+done
+
+if [ "$status" != 0 ]; then
+  exit $status
+fi
+
+exit $status
