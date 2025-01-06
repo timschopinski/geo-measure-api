@@ -31,6 +31,15 @@ services:
       - POSTGRES_PASSWORD=postgres
       - DB_HOST=db
 
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./frontend:/app
+    command: npm run serve
+
 volumes:
   postgres_data:
   media:

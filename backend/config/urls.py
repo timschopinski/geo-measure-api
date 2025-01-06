@@ -44,7 +44,7 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path('api/calculate_distance', CalculateDistanceView.as_view(), name='calculate-distance'),
-    path('api/calculate_area/', CalculateAreaView.as_view(), name='calculate-area'),
+    path('api/calculate_area', CalculateAreaView.as_view(), name='calculate-area'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
