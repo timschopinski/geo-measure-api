@@ -15,3 +15,10 @@ class DistanceSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('point_1', 'point_2')
+
+
+class PolygonSerializer(serializers.Serializer):
+    points = PointSerializer(many=True, min_length=3, help_text='List of points representing the polygon vertices.')
+
+    class Meta:
+        fields = ('points',)
